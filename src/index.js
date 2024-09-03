@@ -11,6 +11,22 @@ html {
   overflow-x:hidden;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #09295f;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #09295f;
+  }
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

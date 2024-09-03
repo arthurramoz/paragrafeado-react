@@ -1,9 +1,10 @@
 import Input from '../Input'
+import { CSSTransition } from 'react-transition-group'
 import styled from 'styled-components'
 import { useState } from 'react'
 import { livros } from './dadosPesquisa'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faGlobe } from '@fortawesome/free-solid-svg-icons'
 
 const ButtonSearch = styled.button`
   margin-left: 25px;
@@ -16,10 +17,26 @@ const ButtonSearch = styled.button`
   background: linear-gradient(90deg, #fdfbfb 15%, #ebedee 140%);
   color: #002742;
   display: flex;
+  position: absolute;
+  right: 30%;
   justify-content: center;
   align-items: center;
+`
+const ButtonSeeAll = styled.button`
+  margin-left: 25px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  padding: 15px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(90deg, #fdfbfb 15%, #ebedee 140%);
+  color: #002742;
+  display: flex;
   position: absolute;
   right: 25%;
+  justify-content: center;
+  align-items: center;
 `
 
 const PesquisaContainer = styled.section`
@@ -53,24 +70,48 @@ const P = styled.p`
 const ModalPesquisa = styled.div`
   background-color: #fff;
   width: 80%;
-  // min-height: 100%;
-  // position: absolute;
-  // top: 520px;
-  visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
-  display: ${({ isDisplayOn }) => (isDisplayOn ? 'block' : 'none')};
-
-  //MUDANÇAS CHAT GPT:
-  height: 90vh;
+  height: 80vh;
   position: fixed;
   top: 70px;
   left: 12%;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 999;
-  border-radius: 10px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+  // <-------- ANIMAÇÃO -------->
+
   transition:
-    opacity 0.5s ease,
-    top 0.5s ease;
+    opacity 1.5s ease,
+    top 1.5s ease;
+
+  &.modal-enter {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  &.modal-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 400ms ease-out,
+      transform 400ms ease-out;
+  }
+
+  &.modal-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.modal-exit-active {
+    opacity: 0;
+    transform: translateY(-50px);
+    transition:
+      opacity 300ms ease-in,
+      transform 300ms ease-in;
+  }
 `
 const DivModalLivro = styled.div`
   display: flex;
@@ -89,10 +130,10 @@ const Titulo2 = styled.h2`
   margin: 0;
   font-size: 35px;
   text-align: center;
-  padding: 50px 0 20px 0;
+  padding: 20px 0 20px 0;
   background-color: #09205f;
   color: white;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `
 const ModalLivro = styled.div`
   width: 250px;
@@ -111,7 +152,7 @@ const BotaoFecharModal = styled.button`
   width: 35px;
   height: 35px;
   position: absolute;
-  top: 55px;
+  top: 25px;
   right: 40px;
   border-radius: 5px;
   background: white;
@@ -143,17 +184,25 @@ function Pesquisa() {
     setModalVisivel(false)
   }
   const PesquisaClick = () => {
-    const resultadoPesquisa = livros.filter((livro) =>
-      livro.nome.includes(textoDigitado),
-    )
-    setLivrosPesquisados(resultadoPesquisa)
-    if (textoDigitado !== '') {
+    const semEspacoVazio = textoDigitado.trim()
+
+    if (semEspacoVazio === '') {
+      alert('Por Favor! Insira o nome do livro que deseja procurar')
+    } else {
+      const resultadoPesquisa = livros.filter((livro) =>
+        livro.nome.includes(semEspacoVazio),
+      )
+      setLivrosPesquisados(resultadoPesquisa)
       setTitulo2Value('LIVROS ENCONTRADOS')
       setModalVisivel(true)
-    } else {
-      setTitulo2Value('LIVROS DISPONÍVEIS')
-      setModalVisivel(true)
     }
+  }
+
+  const VerTodosLivros = () => {
+    const resultadoPesquisa = livros.filter((livro) => livro.nome.includes(''))
+    setLivrosPesquisados(resultadoPesquisa)
+    setTitulo2Value('TODOS OS LIVROS')
+    setModalVisivel(true)
   }
 
   return (
@@ -175,19 +224,29 @@ function Pesquisa() {
             fontSize='22px'
           />
         </ButtonSearch>
+        <ButtonSeeAll onClick={VerTodosLivros}>
+          <FontAwesomeIcon icon={faGlobe} color='#09203f' fontSize='22px' />
+        </ButtonSeeAll>
       </DivButton>
-      <ModalPesquisa isDisplayOn={isModalVisivel} isVisible={isModalVisivel}>
-        <BotaoFecharModal onClick={BotãoFecharModal}>X</BotaoFecharModal>
-        <Titulo2>{titulo2Value}</Titulo2>
-        <DivModalLivro>
-          {livrosPesquisados.map((livro) => (
-            <ModalLivro key={livro.nome}>
-              <P>{livro.nome}</P>
-              <Imagem src={livro.src} alt='livro' />
-            </ModalLivro>
-          ))}
-        </DivModalLivro>
-      </ModalPesquisa>
+      <CSSTransition
+        in={isModalVisivel}
+        timeout={400}
+        classNames='modal'
+        unmountOnExit
+      >
+        <ModalPesquisa isDisplayOn={isModalVisivel} isVisible={isModalVisivel}>
+          <BotaoFecharModal onClick={BotãoFecharModal}>X</BotaoFecharModal>
+          <Titulo2>{titulo2Value}</Titulo2>
+          <DivModalLivro>
+            {livrosPesquisados.map((livro) => (
+              <ModalLivro key={livro.nome}>
+                <P>{livro.nome}</P>
+                <Imagem src={livro.src} alt='livro' />
+              </ModalLivro>
+            ))}
+          </DivModalLivro>
+        </ModalPesquisa>
+      </CSSTransition>
     </PesquisaContainer>
   )
 }

@@ -21,8 +21,9 @@ const Input = styled.input`
   }
 
   &:focus {
+    width: 350px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    transform: scale(1.15);
+    transform: scale(1.05);
   }
 `
 
