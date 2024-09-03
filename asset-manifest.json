@@ -1,16 +1,18 @@
 {
   "files": {
-    "main.js": "/paragrafeado-react/static/js/main.e1d9bf62.js",
+    "main.js": "/paragrafeado-react/static/js/main.b9a138c3.js",
     "static/js/453.a326b017.chunk.js": "/paragrafeado-react/static/js/453.a326b017.chunk.js",
+    "static/media/livroSenhorDosAneis.png": "/paragrafeado-react/static/media/livroSenhorDosAneis.ed34fbf8b4e35580dd30.png",
     "static/media/livro.png": "/paragrafeado-react/static/media/livro.806df01469f52fc9442d.png",
+    "static/media/livroHarryPotter.jpg": "/paragrafeado-react/static/media/livroHarryPotter.ec491532a93ae0d824d2.jpg",
     "static/media/sacola.svg": "/paragrafeado-react/static/media/sacola.64ac027d4d73f3b7b4af9ad800c1225c.svg",
     "static/media/perfil.svg": "/paragrafeado-react/static/media/perfil.fe257de80ff5458890de8f8682eac6d9.svg",
     "index.html": "/paragrafeado-react/index.html",
     "static/media/logo.svg": "/paragrafeado-react/static/media/logo.9c54b187c810fdc3ecca29269446898f.svg",
-    "main.e1d9bf62.js.map": "/paragrafeado-react/static/js/main.e1d9bf62.js.map",
+    "main.b9a138c3.js.map": "/paragrafeado-react/static/js/main.b9a138c3.js.map",
     "453.a326b017.chunk.js.map": "/paragrafeado-react/static/js/453.a326b017.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.e1d9bf62.js"
+    "static/js/main.b9a138c3.js"
   ]
 }
